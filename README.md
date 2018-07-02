@@ -117,6 +117,6 @@ Target: So if the photographer is right there and the light is right there , lik
 ```
 
 ## TODO
-- [ ]  Multi-GPU
+- [x]  Multi-GPU
 
 
