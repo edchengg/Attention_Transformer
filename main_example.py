@@ -13,7 +13,15 @@ def data_gen(V, batch, nbatches):
         tgt = data
         yield Batch(src, tgt, 0)
 
+test = torch.randn(4,1)
+print(test.size())
 
+tmp_1 = [[torch.rand(2,3)],[torch.rand(2,3)]]
+tmp_2 = (torch.rand(2,3),torch.rand(2,3))
+res_1 = [[o[0][:,1:2]] for o in tmp_1]
+res_2 = [[o[:,1:2]] for o in tmp_2]
+print(res_1)
+print(res_2)
 
 V = 11
 criterion = LabelSmoothing(size=V, padding_idx=0, smoothing=0.0)

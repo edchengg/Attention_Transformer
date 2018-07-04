@@ -52,13 +52,13 @@ def run_epoch(data_iter, model, loss_compute):
         total_loss += loss
         total_tokens += batch.ntokens
         tokens += batch.ntokens
-        if i % 5 == 1:
+        if i % 50 == 1:
             elapsed = time.time() - start
-            _loss = loss.item()
-            _batch_ntokens = batch.ntokens.item()
-            _tokens = tokens.item()
+            loss_= loss.item()
+            batch_ntokens_ = batch.ntokens.item()
+            tokens_ = tokens.item()
             print("Epoch Step: %d Loss: %f Tokens per Sec: %f" %
-                  (i, _loss / _batch_ntokens, _tokens / elapsed))
+                  (i, loss_ / batch_ntokens_, tokens_ / elapsed))
             start = time.time()
             tokens = 0
     return total_loss.item() / total_tokens.item()
@@ -160,9 +160,11 @@ class MultiGPULossCompute:
 
     def __call__(self, out, targets, normalize):
         total = 0.0
+        #TODO: targets size --> unsqueeze(-1)
+        #targets = targets.unsequeeze(-1)
         generator = nn.parallel.replicate(self.generator,
                                           devices=self.devices)
-        out_scatter = nn.parallel.scatter(out,
+        out_scatter = nn.parallel.scatter([out],
                                           target_gpus=self.devices)
         out_grad = [[] for _ in out_scatter]
         targets = nn.parallel.scatter(targets,
@@ -170,11 +172,14 @@ class MultiGPULossCompute:
 
         # Divide generating into chunks.
         chunk_size = self.chunk_size
+        #TODO: out_scatter[0] is now a list
         for i in range(0, out_scatter[0].size(1), chunk_size):
             # Predict distributions
-            out_column = [[torch.Tensor(o[:, i:i + chunk_size].data).requires_grad_()
-                           if self.opt is not None else torch.Tensor(o[:, i:i + chunk_size].data)]
-                          for o in out_scatter]
+            #TODO: out_scatter = [[tensor()],[tensor()]]
+            #TODO: out_scatter_init = (tensor(), tensor())
+            out_column = [[Variable(o[:, i:i+chunk_size].data,
+                                    requires_grad=self.opt is not None)]
+                           for o in out_scatter]
             gen = nn.parallel.parallel_apply(generator, out_column)
 
             # Compute loss.
@@ -184,9 +189,14 @@ class MultiGPULossCompute:
             loss = nn.parallel.parallel_apply(self.criterion, y)
 
             # Sum and normalize loss
+            #TODO: another way to fix without changing other thing
+            '''
+            for idx in range(len(loss)):
+                loss[idx] = loss[idx].unsqueeze(0)
+            '''
             l = nn.parallel.gather(loss,
                                    target_device=self.devices[0])
-            l = l.sum()[0] / normalize
+            l = l.sum()[0] / normalize.float()
             total += l.data[0]
 
             # Backprop loss to output of transformer
@@ -204,7 +214,7 @@ class MultiGPULossCompute:
             o1.backward(gradient=o2)
             self.opt.step()
             self.opt.optimizer.zero_grad()
-        return total * normalize
+        return total * normalize.float()
 
 
 class MyIterator(data.Iterator):
