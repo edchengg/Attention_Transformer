@@ -116,7 +116,5 @@ Translation:    If there 's a photographers and there 's a light there , and the
 Target: So if the photographer is right there and the light is right there , like a nice <unk> , and the client says , " Cameron , we want a walking shot , " well then this leg goes first , nice and long , this arm goes back , this arm goes forward , the head is at three quarters , and you just go back and forth , just do that , and then you look back at your imaginary friends , 300 , 400 , 500 times .
 ```
 
-## TODO
-- [x]  Multi-GPU
 
 
