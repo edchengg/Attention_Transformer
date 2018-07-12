@@ -113,7 +113,7 @@ Translation:    Because even though we do the same picture changes , our perspec
 Target: Because while we take the same photo , our perspectives change , and she reaches new milestones , and I get to see life through her eyes , and how she interacts with and sees everything .
 
 Translation:    If there 's a photographers and there 's a light there , and there 's a nice tube , and we want to go back to a client , " Cameron is now a picture , and then we 're going to go back and go back , and then , and this arm , and then you just
-Target: So if the photographer is right there and the light is right there , like a nice <unk> , and the client says , " Cameron , we want a walking shot , " well then this leg goes first , nice and long , this arm goes back , this arm goes forward , the head is at three quarters , and you just go back and forth , just do that , and then you look back at your imaginary friends , 300 , 400 , 500 times .
+Target: So if the photographer is right there and the light is right there , like a nice <unk> , and the client says , " Cameron , we want a walking shot , " well then this leg goes first , nice and long , this arm goes back , this arm goes forward , the head is at three quarters , and you just go back and forth , just do that , and then you look back at your imaginary friends , 300 , 400 , 500 times ..
 ```
 
 
